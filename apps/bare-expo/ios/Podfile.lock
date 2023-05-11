@@ -231,7 +231,7 @@ PODS:
   - EXTaskManager (11.1.1):
     - ExpoModulesCore
     - UMAppLoader
-  - EXUpdatesInterface (0.9.1)
+  - EXUpdatesInterface (0.9.3)
   - FBLazyVector (0.71.2)
   - FBReactNativeSpec (0.71.2):
     - RCT-Folly (= 2021.07.22.00)
@@ -1285,7 +1285,7 @@ SPEC CHECKSUMS:
   EXSQLite: 848167441b14cb6cdd6ae46c8d62289161a79550
   EXStructuredHeaders: b1a48d732562e2cc81f11771bcfd29534f5d9254
   EXTaskManager: f8257faa4c20acfc3f31e21ab82a62544d70db85
-  EXUpdatesInterface: dd699d1930e28639dcbd70a402caea98e86364ca
+  EXUpdatesInterface: e86394c0770f14eb96386cbb32be83fa6a97e8f9
   FBLazyVector: d58428b28fe1f5070fe993495b0e2eaf701d3820
   FBReactNativeSpec: 2221315f7497005158ecb985a6d7537ddbdd6e31
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
