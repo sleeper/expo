@@ -3,13 +3,15 @@ import http from 'http';
 import { Socket } from 'node:net';
 import querystring from 'querystring';
 
-export default (options: {
+import * as Log from '../../log';
+
+export async function getSessionUsingBrowserAuthFlowAsync(options: {
   expoWebsiteUrl: string;
   serverPort: number;
-}): { executeAuthFlow: () => Promise<string> } => {
+}): Promise<string> {
   const { expoWebsiteUrl, serverPort } = options;
   if (!expoWebsiteUrl || !serverPort) {
-    throw new Error('Expo website URL and localserver port are required.');
+    throw new Error('Expo website URL and local server port are required.');
   }
   const scheme = 'http';
   const hostname = 'localhost';
@@ -21,8 +23,7 @@ export default (options: {
       app_redirect_uri: redirectUri,
     };
     const params = querystring.stringify(data);
-    const expoSsoLoginUrl = `${expoWebsiteUrl}/sso-login?${params}`;
-    return expoSsoLoginUrl;
+    return `${expoWebsiteUrl}/sso-login?${params}`;
   };
 
   // Start server and begin auth flow
@@ -34,19 +35,17 @@ export default (options: {
         (request: http.IncomingMessage, response: http.ServerResponse) => {
           try {
             if (!(request.method === 'GET' && request.url?.includes('/auth/callback'))) {
-              throw new Error('Unexpected SSO login response');
+              throw new Error('Unexpected SSO login response.');
             }
             const url = new URL(request.url, `http:${request.headers.host}`);
             const sessionSecret = url.searchParams.get('session_secret');
 
             if (!sessionSecret) {
-              throw new Error('No session secret returned');
+              throw new Error('Request missing session_secret search parameter.');
             }
             resolve(sessionSecret);
             response.writeHead(200, { 'Content-Type': 'text/plain' });
-            response.write(
-              `Thank you, login details will be returned to the CLI. You can now close this tab.`
-            );
+            response.write(`Website login has completed. You can now close this tab.`);
             response.end();
           } catch (error) {
             reject(error);
@@ -61,8 +60,7 @@ export default (options: {
       );
 
       server.listen(serverPort, hostname, () => {
-        // eslint-disable-next-line no-console
-        console.log(`Listening for login response at http://${hostname}:${serverPort}`);
+        Log.log('Waiting for browser login...');
       });
 
       server.on('connection', (connection) => {
@@ -78,7 +76,5 @@ export default (options: {
     });
   };
 
-  return {
-    executeAuthFlow,
-  };
-};
+  return await executeAuthFlow();
+}

@@ -5,22 +5,17 @@ import { CurrentUserQuery } from '../../graphql/generated';
 import * as Log from '../../log';
 import * as Analytics from '../../utils/analytics/rudderstackClient';
 import { getDevelopmentCodeSigningDirectory } from '../../utils/codesigning';
-import { getExpoWebsiteBaseUrl, getSsoLocalServerPort } from '../endpoint';
+import { getExpoWebsiteBaseUrl, getSsoLocalServerPortAsync } from '../endpoint';
 import { graphqlClient } from '../graphql/client';
 import { UserQuery } from '../graphql/queries/UserQuery';
 import { fetchAsync } from '../rest/client';
 import { APISettings } from '../settings';
 import UserSettings from './UserSettings';
-import expoSsoLauncher from './expoSsoLauncher';
+import { getSessionUsingBrowserAuthFlowAsync } from './expoSsoLauncher';
 
 export type Actor = NonNullable<CurrentUserQuery['meActor']>;
 
 let currentUser: Actor | undefined;
-
-const config = {
-  expoWebsiteUrl: getExpoWebsiteBaseUrl(),
-  serverPort: getSsoLocalServerPort(),
-};
 
 export const ANONYMOUS_USERNAME = 'anonymous';
 
@@ -82,28 +77,22 @@ export async function loginAsync(json: {
 }
 
 export async function ssoLoginAsync(): Promise<void> {
-  const auth = expoSsoLauncher(config);
-  const sessionSecret = await auth.executeAuthFlow();
+  const config = {
+    expoWebsiteUrl: getExpoWebsiteBaseUrl(),
+    serverPort: await getSsoLocalServerPortAsync(),
+  };
+  const sessionSecret = await getSessionUsingBrowserAuthFlowAsync(config);
   const userData = await fetchUserAsync({ sessionSecret });
 
   await UserSettings.setSessionAsync({
     sessionSecret,
     userId: userData.id,
     username: userData.username,
-    currentConnection: 'Username-Password-Authentication',
+    currentConnection: 'Browser-Flow-Authentication',
   });
 }
 
 export async function logoutAsync(): Promise<void> {
-  const user = await getUserAsync().catch(() => null);
-  const currentConnection = UserSettings.getSession()?.currentConnection;
-  if (user?.__typename === 'SSOUser' && currentConnection === 'Username-Password-Authentication') {
-    // Delete login session and revoke SSO tokens stored on servers
-    await fetchAsync('auth/logout', {
-      method: 'POST',
-      body: undefined,
-    });
-  }
   currentUser = undefined;
   await Promise.all([
     fs.rm(getDevelopmentCodeSigningDirectory(), { recursive: true, force: true }),

@@ -81,42 +81,34 @@ describe(showLoginPromptAsync, () => {
     await showLoginPromptAsync({ username: 'hello', password: 'world' });
   });
 
-  it('does not prompt whether to use SSO when called from login', async () => {
-    asMock(confirmAsync).mockImplementation();
-    asMock(loginAsync).mockImplementation(async () => {});
-    asMock(ssoLoginAsync).mockImplementation(async () => {});
+  it('calls regular login if the sso flag is false', async () => {
+    asMock(promptAsync)
+      .mockImplementationOnce(async () => ({ username: 'USERNAME', password: 'PASSWORD' }))
+      .mockImplementation(() => {
+        throw new Error("shouldn't happen");
+      });
 
-    // Regular login
     await showLoginPromptAsync({ username: 'hello', password: 'world', sso: false });
-    expect(confirmAsync).not.toHaveBeenCalled();
-    expect(loginAsync).toHaveBeenCalled();
 
-    // SSO login
-    await showLoginPromptAsync({ username: 'hello', password: 'world', sso: true });
-    expect(confirmAsync).not.toHaveBeenCalled();
-    expect(ssoLoginAsync).toHaveBeenCalled();
+    expect(loginAsync).toHaveBeenCalled();
   });
 
-  it('prompts whether to use SSO when the sso flag has not been set with negative confirmation', async () => {
-    asMock(confirmAsync).mockResolvedValue(false);
-    asMock(loginAsync).mockImplementation(async () => {});
-    asMock(ssoLoginAsync).mockImplementation(async () => {});
+  it('calls regular login if the sso flag is undefined', async () => {
+    asMock(promptAsync)
+      .mockImplementationOnce(async () => ({ username: 'USERNAME', password: 'PASSWORD' }))
+      .mockImplementation(() => {
+        throw new Error("shouldn't happen");
+      });
 
     await showLoginPromptAsync({ username: 'hello', password: 'world' });
-    expect(confirmAsync).toHaveBeenCalled();
+
     expect(loginAsync).toHaveBeenCalled();
-    expect(ssoLoginAsync).not.toHaveBeenCalled();
   });
 
-  it('prompts whether to use SSO when the sso flag has not been set, with positive confirmation', async () => {
-    asMock(confirmAsync).mockResolvedValue(true);
-    asMock(loginAsync).mockImplementation(async () => {});
-    asMock(ssoLoginAsync).mockImplementation(async () => {});
+  it('calls SSO login if the sso flag is true', async () => {
+    asMock(promptAsync);
+    await showLoginPromptAsync({ username: 'hello', password: 'world', sso: true });
 
-    asMock(confirmAsync).mockResolvedValue(true);
-
-    await showLoginPromptAsync({});
-    expect(loginAsync).not.toHaveBeenCalled();
     expect(ssoLoginAsync).toHaveBeenCalled();
   });
 });

@@ -37,7 +37,7 @@ it('runs `npx expo register --help`', async () => {
   expect(results.stdout).toMatchInlineSnapshot(`
     "
       Info
-        Sign up for a new Expo account (for non-SSO user only)
+        Sign up for a new Expo account
 
       Usage
         $ npx expo register

@@ -3,7 +3,7 @@ import chalk from 'chalk';
 
 import * as Log from '../../log';
 import { learnMore } from '../../utils/link';
-import promptAsync, { Question, confirmAsync } from '../../utils/prompts';
+import promptAsync, { Question } from '../../utils/prompts';
 import { ApiV2Error } from '../rest/client';
 import { retryUsernamePasswordAuthWithOTPAsync } from './otp';
 import { Actor, getUserAsync, loginAsync, ssoLoginAsync } from './user';
@@ -21,25 +21,24 @@ export async function showLoginPromptAsync({
   sso?: boolean | undefined;
 } = {}): Promise<void> {
   const hasCredentials = options.username && options.password;
+  const sso = options.sso;
 
   if (printNewLine) {
     Log.log();
   }
 
-  Log.log(hasCredentials ? 'Logging in to EAS' : 'Log in to EAS');
-
-  let useSso = options.sso;
-  if (options.sso === undefined) {
-    useSso = await confirmAsync({
-      message: `Do you want to log in with SSO?`,
-    });
-  }
-
-  if (useSso) {
+  if (sso) {
     // login with SSO
     await ssoLoginAsync();
     return;
   }
+
+  Log.log(`For other login options, ctrl-c to exit and then run 'eas login'.`);
+  Log.log(
+    hasCredentials
+      ? 'Logging in to EAS with email or username'
+      : 'Log in to EAS with email or username'
+  );
 
   let username = options.username;
   let password = options.password;

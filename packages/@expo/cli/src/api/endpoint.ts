@@ -1,4 +1,5 @@
 import { env } from '../utils/env';
+import { getFreePortAsync } from '../utils/port';
 
 /** Get the URL for the expo.dev API. */
 export function getExpoApiBaseUrl(): string {
@@ -22,12 +23,13 @@ export function getExpoWebsiteBaseUrl(): string {
   }
 }
 
-export function getSsoLocalServerPort(): number {
-  let port: number;
+export async function getSsoLocalServerPortAsync(): Promise<number> {
+  let startPort: number;
   if (process.env.SSO_LOCAL_SERVER_PORT) {
-    port = parseInt(process.env.SSO_LOCAL_SERVER_PORT, 10);
+    startPort = Number(process.env.SSO_LOCAL_SERVER_PORT);
   } else {
-    port = 8080;
+    startPort = 19200;
   }
+  const port = await getFreePortAsync(startPort);
   return port;
 }
