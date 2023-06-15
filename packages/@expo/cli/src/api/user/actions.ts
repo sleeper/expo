@@ -28,16 +28,14 @@ export async function showLoginPromptAsync({
   }
 
   if (sso) {
-    // login with SSO
     await ssoLoginAsync();
     return;
   }
 
-  Log.log(`For other login options, ctrl-c to exit and then run 'eas login'.`);
   Log.log(
     hasCredentials
-      ? 'Logging in to EAS with email or username'
-      : 'Log in to EAS with email or username'
+      ? `Logging in to EAS with email or username (exit and run 'eas login' for other options)`
+      : `Log in to EAS with email or username (exit and run 'eas login' for other options)`
   );
 
   let username = options.username;
