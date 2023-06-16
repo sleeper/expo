@@ -1,5 +1,5 @@
 import { asMock } from '../../../__tests__/asMock';
-import { confirmAsync, promptAsync } from '../../../utils/prompts';
+import { promptAsync } from '../../../utils/prompts';
 import { ApiV2Error } from '../../rest/client';
 import { showLoginPromptAsync } from '../actions';
 import { retryUsernamePasswordAuthWithOTPAsync, UserSecondFactorDeviceMethod } from '../otp';
