@@ -10,9 +10,7 @@ export async function getSessionUsingBrowserAuthFlowAsync(options: {
   serverPort: number;
 }): Promise<string> {
   const { expoWebsiteUrl, serverPort } = options;
-  if (!expoWebsiteUrl || !serverPort) {
-    throw new Error('Expo website URL and local server port are required.');
-  }
+
   const scheme = 'http';
   const hostname = 'localhost';
   const path = '/auth/callback';

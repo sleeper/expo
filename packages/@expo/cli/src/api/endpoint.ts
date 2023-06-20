@@ -24,12 +24,6 @@ export function getExpoWebsiteBaseUrl(): string {
 }
 
 export async function getSsoLocalServerPortAsync(): Promise<number> {
-  let startPort: number;
-  if (process.env.SSO_LOCAL_SERVER_PORT) {
-    startPort = Number(process.env.SSO_LOCAL_SERVER_PORT);
-  } else {
-    startPort = 19200;
-  }
-  const port = await getFreePortAsync(startPort);
-  return port;
+  const startPort = env.EXPO_SSO_LOCAL_SERVER_PORT;
+  return await getFreePortAsync(startPort);
 }
