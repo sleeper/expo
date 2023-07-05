@@ -153,10 +153,9 @@ export const ExpoDocsItem = ({ item, onSelect, isNested }: Props) => {
               <ItemFootnotePrefix url={item.url} />
             </>
           )}
-          {!isNested ||
-            (item.content && (
-              <FOOTNOTE theme="secondary" {...getContentHighlightHTML(item)} css={contentStyle} />
-            ))}
+          {(!isNested || item.content) && (
+            <FOOTNOTE theme="secondary" {...getContentHighlightHTML(item)} css={contentStyle} />
+          )}
         </div>
       </div>
     </Command.Item>
