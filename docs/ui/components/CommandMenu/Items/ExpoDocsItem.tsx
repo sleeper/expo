@@ -86,7 +86,7 @@ export const ExpoDocsItem = ({ item, onSelect, isNested }: Props) => {
   const { lvl0, lvl2, lvl3, lvl4, lvl6 } = item.hierarchy;
   return (
     <Command.Item
-      className={mergeClasses(isNested && 'ml-8')}
+      className={mergeClasses(isNested && 'ml-8 !min-h-[36px]')}
       value={`expodocs-${item.objectID}`}
       onSelect={() => {
         openLink(transformUrl(item.url));
@@ -100,43 +100,51 @@ export const ExpoDocsItem = ({ item, onSelect, isNested }: Props) => {
           {lvl6 && (
             <>
               <CALLOUT weight="medium" {...getHighlightHTML(item, 'lvl6')} />
-              <FOOTNOTE css={footnoteStyle}>
-                <ItemFootnotePrefix url={item.url} isNested />
-                <span {...getHighlightHTML(item, 'lvl0')} />
-                <FootnoteSection item={item} levelKey="lvl2" />
-                <FootnoteSection item={item} levelKey="lvl3" />
-                <FootnoteSection item={item} levelKey="lvl4" />
-              </FOOTNOTE>
+              {!isNested && (
+                <FOOTNOTE css={footnoteStyle}>
+                  <ItemFootnotePrefix url={item.url} isNested />
+                  <span {...getHighlightHTML(item, 'lvl0')} />
+                  <FootnoteSection item={item} levelKey="lvl2" />
+                  <FootnoteSection item={item} levelKey="lvl3" />
+                  <FootnoteSection item={item} levelKey="lvl4" />
+                </FOOTNOTE>
+              )}
             </>
           )}
           {!lvl6 && lvl4 && (
             <>
               <CALLOUT weight="medium" {...getHighlightHTML(item, 'lvl4')} />
-              <FOOTNOTE css={footnoteStyle}>
-                <ItemFootnotePrefix url={item.url} isNested />
-                <span {...getHighlightHTML(item, 'lvl0')} />
-                <FootnoteSection item={item} levelKey="lvl2" />
-                <FootnoteSection item={item} levelKey="lvl3" />
-              </FOOTNOTE>
+              {!isNested && (
+                <FOOTNOTE css={footnoteStyle} className={isNested ? '!hidden' : ''}>
+                  <ItemFootnotePrefix url={item.url} isNested />
+                  <span {...getHighlightHTML(item, 'lvl0')} />
+                  <FootnoteSection item={item} levelKey="lvl2" />
+                  <FootnoteSection item={item} levelKey="lvl3" />
+                </FOOTNOTE>
+              )}
             </>
           )}
           {!lvl6 && !lvl4 && lvl3 && (
             <>
               <CALLOUT weight="medium" {...getHighlightHTML(item, 'lvl3')} />
-              <FOOTNOTE css={footnoteStyle}>
-                <ItemFootnotePrefix url={item.url} isNested />
-                <span {...getHighlightHTML(item, 'lvl0')} />
-                <FootnoteSection item={item} levelKey="lvl2" />
-              </FOOTNOTE>
+              {!isNested && (
+                <FOOTNOTE css={footnoteStyle} className={isNested ? '!hidden' : ''}>
+                  <ItemFootnotePrefix url={item.url} isNested />
+                  <span {...getHighlightHTML(item, 'lvl0')} />
+                  <FootnoteSection item={item} levelKey="lvl2" />
+                </FOOTNOTE>
+              )}
             </>
           )}
           {!lvl6 && !lvl4 && !lvl3 && lvl2 && (
             <>
               <CALLOUT weight="medium" {...getHighlightHTML(item, 'lvl2')} />
-              <FOOTNOTE css={footnoteStyle}>
-                <ItemFootnotePrefix url={item.url} isNested />
-                <span {...getHighlightHTML(item, 'lvl0')} />
-              </FOOTNOTE>
+              {!isNested && (
+                <FOOTNOTE css={footnoteStyle} className={isNested ? '!hidden' : ''}>
+                  <ItemFootnotePrefix url={item.url} isNested />
+                  <span {...getHighlightHTML(item, 'lvl0')} />
+                </FOOTNOTE>
+              )}
             </>
           )}
           {!lvl6 && !lvl4 && !lvl3 && !lvl2 && lvl0 && (
@@ -145,9 +153,10 @@ export const ExpoDocsItem = ({ item, onSelect, isNested }: Props) => {
               <ItemFootnotePrefix url={item.url} />
             </>
           )}
-          {!isNested && (
-            <FOOTNOTE theme="secondary" {...getContentHighlightHTML(item)} css={contentStyle} />
-          )}
+          {!isNested ||
+            (item.content && (
+              <FOOTNOTE theme="secondary" {...getContentHighlightHTML(item)} css={contentStyle} />
+            ))}
         </div>
       </div>
     </Command.Item>
