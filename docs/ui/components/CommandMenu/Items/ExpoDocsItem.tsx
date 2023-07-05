@@ -1,4 +1,4 @@
-import { DocsLogo } from '@expo/styleguide';
+import { DocsLogo, mergeClasses } from '@expo/styleguide';
 import {
   PlanEnterpriseIcon,
   BookOpen02Icon,
@@ -29,21 +29,22 @@ const { LATEST_VERSION } = versions;
 type Props = {
   item: AlgoliaItemType;
   onSelect?: () => void;
+  isNested?: boolean;
 };
 
 const isDev = process.env.NODE_ENV === 'development';
 
-const ItemIcon = ({ url }: { url: string }) => {
+const ItemIcon = ({ url, className }: { url: string; className?: string }) => {
   if (isReferencePath(url)) {
-    return <DocsLogo className="text-icon-secondary" />;
+    return <DocsLogo className={mergeClasses('text-icon-secondary', className)} />;
   } else if (isEASPath(url)) {
-    return <PlanEnterpriseIcon className="text-icon-secondary" />;
+    return <PlanEnterpriseIcon className={mergeClasses('text-icon-secondary', className)} />;
   } else if (isHomePath(url)) {
-    return <Home02Icon className="text-icon-secondary" />;
+    return <Home02Icon className={mergeClasses('text-icon-secondary', className)} />;
   } else if (isLearnPath(url)) {
-    return <GraduationHat02Icon className="text-icon-secondary" />;
+    return <GraduationHat02Icon className={mergeClasses('text-icon-secondary', className)} />;
   }
-  return <BookOpen02Icon className="text-icon-secondary" />;
+  return <BookOpen02Icon className={mergeClasses('text-icon-secondary', className)} />;
 };
 
 const getFootnotePrefix = (url: string) => {
@@ -81,18 +82,19 @@ const transformUrl = (url: string) => {
   return url;
 };
 
-export const ExpoDocsItem = ({ item, onSelect }: Props) => {
+export const ExpoDocsItem = ({ item, onSelect, isNested }: Props) => {
   const { lvl0, lvl2, lvl3, lvl4, lvl6 } = item.hierarchy;
   return (
     <Command.Item
+      className={mergeClasses(isNested && 'ml-8')}
       value={`expodocs-${item.objectID}`}
       onSelect={() => {
         openLink(transformUrl(item.url));
         onSelect && onSelect();
       }}>
-      <div css={itemStyle}>
+      <div className={mergeClasses('inline-flex items-center gap-3 break-words')}>
         <div css={itemIconWrapperStyle}>
-          <ItemIcon url={item.url} />
+          <ItemIcon url={item.url} className={isNested ? 'icon-sm text-icon-tertiary' : ''} />
         </div>
         <div>
           {lvl6 && (
@@ -143,7 +145,9 @@ export const ExpoDocsItem = ({ item, onSelect }: Props) => {
               <ItemFootnotePrefix url={item.url} />
             </>
           )}
-          <FOOTNOTE theme="secondary" {...getContentHighlightHTML(item)} css={contentStyle} />
+          {!isNested && (
+            <FOOTNOTE theme="secondary" {...getContentHighlightHTML(item)} css={contentStyle} />
+          )}
         </div>
       </div>
     </Command.Item>
