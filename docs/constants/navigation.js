@@ -254,6 +254,7 @@ const general = [
       makePage('modules/use-standalone-expo-module-in-your-project.mdx'),
       makePage('modules/existing-library.mdx'),
       makePage('modules/module-api.mdx'),
+      makePage('modules/third-party-library.mdx'),
       makePage('modules/android-lifecycle-listeners.mdx'),
       makePage('modules/appdelegate-subscribers.mdx'),
       makePage('modules/autolinking.mdx'),
