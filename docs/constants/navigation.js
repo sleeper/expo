@@ -173,28 +173,6 @@ const general = [
       { expanded: false }
     ),
   ]),
-  makeSection(
-    'Expo Modules API',
-    [
-      makePage('modules/overview.mdx'),
-      makePage('modules/get-started.mdx'),
-      makeSection('Tutorials', [
-        makePage('modules/native-module-tutorial.mdx'),
-        makePage('modules/native-view-tutorial.mdx'),
-        makePage('modules/config-plugin-and-native-module-tutorial.mdx'),
-        makePage('modules/use-standalone-expo-module-in-your-project.mdx'),
-        makePage('modules/existing-library.mdx'),
-      ]),
-      makeSection('Reference', [
-        makePage('modules/module-api.mdx'),
-        makePage('modules/android-lifecycle-listeners.mdx'),
-        makePage('modules/appdelegate-subscribers.mdx'),
-        makePage('modules/autolinking.mdx'),
-        makePage('modules/module-config.mdx'),
-      ]),
-    ],
-    { expanded: false }
-  ),
   makeSection('Expo Router', [
     makeGroup('Advanced', [
       makePage('router/advanced/root-layout.mdx'),
@@ -220,6 +198,28 @@ const general = [
       makePage('router/reference/faq.mdx'),
     ]),
   ]),
+  makeSection(
+    'Expo Modules API',
+    [
+      makePage('modules/overview.mdx'),
+      makePage('modules/get-started.mdx'),
+      makeSection('Tutorials', [
+        makePage('modules/native-module-tutorial.mdx'),
+        makePage('modules/native-view-tutorial.mdx'),
+        makePage('modules/config-plugin-and-native-module-tutorial.mdx'),
+        makePage('modules/use-standalone-expo-module-in-your-project.mdx'),
+        makePage('modules/existing-library.mdx'),
+      ]),
+      makeSection('Reference', [
+        makePage('modules/module-api.mdx'),
+        makePage('modules/android-lifecycle-listeners.mdx'),
+        makePage('modules/appdelegate-subscribers.mdx'),
+        makePage('modules/autolinking.mdx'),
+        makePage('modules/module-config.mdx'),
+      ]),
+    ],
+    { expanded: false }
+  ),
   makeSection('EAS', [makePage('eas/index.mdx')]),
   makeSection('EAS Build', [
     makePage('build/introduction.mdx'),
