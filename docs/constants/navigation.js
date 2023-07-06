@@ -226,7 +226,7 @@ const general = [
     makePage('build/setup.mdx'),
     makePage('build/eas-json.mdx'),
     makePage('build/internal-distribution.mdx'),
-    makePage('build/automating-submissions.mdx'),
+    makePage('build/automate-submissions.mdx'),
     makePage('build/updates.mdx'),
     makePage('build/building-on-ci.mdx'),
     makeGroup(
